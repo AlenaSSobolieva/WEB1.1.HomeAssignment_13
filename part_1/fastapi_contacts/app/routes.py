@@ -1,31 +1,53 @@
-# fastapi_contacts/app/routes.py
+# app/routes.py
 
-from fastapi import APIRouter, Depends, HTTPException, status, Form
+from fastapi import APIRouter, Depends, HTTPException, status, File, UploadFile
 from sqlalchemy.orm import Session
-from fastapi_contacts.app import crud, database, schemas, authentication
+from cloudinary.uploader import upload  # Import the Cloudinary upload function
+from . import crud, database, schemas, utilities, dependencies
 
 router = APIRouter()
 
+
 @router.post("/register", response_model=schemas.UserResponse)
-async def register_user(user: schemas.UserCreate, db: Session = Depends(database.get_db)):
+async def register_user(
+        user: schemas.UserCreate,
+        avatar: UploadFile = File(None),  # Add this line for avatar upload
+        db: Session = Depends(database.get_db),
+        current_user: str = Depends(dependencies.get_current_user_rate_limited),
+):
     existing_user = crud.get_user_by_email(db, email=user.email)
     if existing_user:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="User already registered with this email")
+
     created_user = crud.create_user(db=db, user=user)
+
+    # Send email verification
+    utilities.send_email_verification(created_user.email, created_user.id)
+
+    # Upload avatar to Cloudinary
+    if avatar:
+        result = upload(avatar.file)
+        created_user.avatar_url = result['url']
 
     response_model = schemas.UserResponse(id=created_user.id, email=created_user.email,
                                           is_active=created_user.is_active)
 
     return response_model
 
-@router.post("/token", response_model=schemas.Token)
-async def login_for_access_token(form_data: schemas.OAuth2PasswordRequestForm = Depends()):
-    return authentication.create_access_token(data={"sub": form_data.username})
 
-@router.get("/contacts/{email}", response_model=schemas.Contact)
-async def read_contact(email: str, db: Session = Depends(database.get_db)):
-    contact = crud.get_contact_by_email(db, email=email)
-    if contact is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Contact not found")
-    return contact
+@router.get("/verify-email/{user_id}", response_model=schemas.Message)
+async def verify_email(
+        user_id: int,
+        db: Session = Depends(database.get_db),
+        current_user: str = Depends(dependencies.get_current_user_rate_limited_throttle),
+):
+    user = crud.get_user_by_id(db, user_id)
+    if not user:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
 
+    if user.is_active:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Email already verified")
+
+    crud.update_user_verification_status(db, user_id, True)
+
+    return {"message": "Email successfully verified"}

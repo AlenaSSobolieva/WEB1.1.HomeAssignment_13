@@ -10,9 +10,12 @@ class OAuth2PasswordRequestForm(BaseModel):
     client_secret: str = ""
     grant_type: str = "password"
 
-class UserCreate(BaseModel):
+class User(BaseModel):
+    id: int
     email: str
-    password: str
+    is_active: bool
+    avatar_url: Optional[str] = None
+
 
 class UserResponse(BaseModel):
     id: int

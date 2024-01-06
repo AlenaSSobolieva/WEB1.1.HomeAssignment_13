@@ -1,5 +1,6 @@
 # fastapi_contacts/
 # ├── main.py
+# ├── .env
 # ├── app/
 # │   ├── __init__.py
 # │   ├── models.py

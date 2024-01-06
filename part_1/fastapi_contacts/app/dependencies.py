@@ -3,10 +3,8 @@
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
-from typing import Optional
-
-SECRET_KEY = "your-test-secret-key"  # Replace with a simple string for testing purposes
-ALGORITHM = "HS256"
+from fastapi.throttling import ThrottlingRateLimit, ThrottlingMiddleware
+from .security import SECRET_KEY, ALGORITHM
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
@@ -25,3 +23,20 @@ def get_current_user(token: str = Depends(oauth2_scheme)):
         raise credentials_exception
     return username
 
+# Rate limiting configuration
+throttle_contact_routes = ThrottlingRateLimit(
+    requests=5,  # Number of requests allowed
+    seconds=60,  # Time window for rate limiting in seconds
+)
+
+# Apply rate limiting to the contact routes
+throttle_middleware_contact_routes = ThrottlingMiddleware(
+    throttle=[throttle_contact_routes],
+    backend="memory"  # You can use "redis" for a distributed setup
+)
+
+def get_current_user_rate_limited(token: str = Depends(oauth2_scheme)):
+    return get_current_user(token=token)
+
+def get_current_user_rate_limited_throttle(token: str = Depends(oauth2_scheme)):
+    return get_current_user(token=token)
