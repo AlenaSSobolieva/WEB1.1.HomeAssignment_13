@@ -3,10 +3,29 @@
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
-from fastapi.throttling import ThrottlingRateLimit, ThrottlingMiddleware
-from .security import SECRET_KEY, ALGORITHM
+from datetime import datetime, timedelta
+from security import SECRET_KEY, ALGORITHM
+
+# Define a simple rate limiting mechanism
+class RateLimiter:
+    def __init__(self, requests: int, seconds: int):
+        self.requests = requests
+        self.seconds = seconds
+        self.token_info = {}
+
+    def limit_exceeded(self, username: str):
+        now = datetime.utcnow()
+        user_info = self.token_info.get(username, [])
+        user_info = [t for t in user_info if now - t <= timedelta(seconds=self.seconds)]
+        if len(user_info) >= self.requests:
+            return True
+        self.token_info[username] = user_info + [now]
+        return False
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+
+# Define the rate limiter with 5 requests per 60 seconds
+rate_limiter = RateLimiter(requests=5, seconds=60)
 
 def get_current_user(token: str = Depends(oauth2_scheme)):
     credentials_exception = HTTPException(
@@ -21,22 +40,16 @@ def get_current_user(token: str = Depends(oauth2_scheme)):
             raise credentials_exception
     except JWTError:
         raise credentials_exception
+
+    # Check rate limiting
+    if rate_limiter.limit_exceeded(username):
+        raise HTTPException(
+            status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+            detail="Rate limit exceeded",
+            headers={"Retry-After": str(rate_limiter.seconds)},
+        )
+
     return username
 
-# Rate limiting configuration
-throttle_contact_routes = ThrottlingRateLimit(
-    requests=5,  # Number of requests allowed
-    seconds=60,  # Time window for rate limiting in seconds
-)
-
-# Apply rate limiting to the contact routes
-throttle_middleware_contact_routes = ThrottlingMiddleware(
-    throttle=[throttle_contact_routes],
-    backend="memory"  # You can use "redis" for a distributed setup
-)
-
 def get_current_user_rate_limited(token: str = Depends(oauth2_scheme)):
-    return get_current_user(token=token)
-
-def get_current_user_rate_limited_throttle(token: str = Depends(oauth2_scheme)):
     return get_current_user(token=token)

@@ -1,6 +1,7 @@
 # fastapi_contacts/app/schemas.py
 
 from pydantic import BaseModel, Field
+from typing import List, Optional
 
 class OAuth2PasswordRequestForm(BaseModel):
     username: str = Field(..., alias="email")
@@ -10,12 +11,14 @@ class OAuth2PasswordRequestForm(BaseModel):
     client_secret: str = ""
     grant_type: str = "password"
 
-class User(BaseModel):
+class UserBase(BaseModel):
     id: int
     email: str
     is_active: bool
     avatar_url: Optional[str] = None
 
+class UserCreate(UserBase):
+    password: str
 
 class UserResponse(BaseModel):
     id: int
@@ -31,8 +34,5 @@ class Token(BaseModel):
     access_token: str
     token_type: str
 
-class User(BaseModel):  # Add this class
-    id: int
-    email: str
-    is_active: bool
-
+class Message(BaseModel):  # Add this class
+    message: str

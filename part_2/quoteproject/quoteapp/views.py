@@ -4,8 +4,8 @@ import os
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login, logout
-from quoteproject.quoteapp.models import Author, Quote
-from quoteproject.quoteapp.forms import AuthorForm, QuoteForm
+from models import Author, Quote
+from forms import AuthorForm, QuoteForm
 from django.conf import settings
 
 

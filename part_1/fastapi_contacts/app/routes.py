@@ -2,8 +2,8 @@
 
 from fastapi import APIRouter, Depends, HTTPException, status, File, UploadFile
 from sqlalchemy.orm import Session
-from cloudinary.uploader import upload  # Import the Cloudinary upload function
-from . import crud, database, schemas, utilities, dependencies
+from cloudinary.uploader import upload
+import crud, database, schemas, utilities, dependencies
 
 router = APIRouter()
 
@@ -39,7 +39,7 @@ async def register_user(
 async def verify_email(
         user_id: int,
         db: Session = Depends(database.get_db),
-        current_user: str = Depends(dependencies.get_current_user_rate_limited_throttle),
+        current_user: str = Depends(dependencies.get_current_user_rate_limited),
 ):
     user = crud.get_user_by_id(db, user_id)
     if not user:

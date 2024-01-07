@@ -3,6 +3,16 @@
 from sqlalchemy import Boolean, Column, Integer, String
 from database import Base
 
+class Contact(Base):
+    __tablename__ = "contacts"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, index=True)
+    surname = Column(String, index=True)
+    email = Column(String, index=True, unique=True)
+    phone_number = Column(String)
+    birthday = Column(String)  # Keep it as a string
+    additional_info = Column(String, nullable=True)
 class User(Base):
     __tablename__ = "users"
 

@@ -15,7 +15,7 @@ services:
     environment:
       POSTGRES_DB: postgres
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: Queen2001)  # Replace with your actual database password
+      POSTGRES_PASSWORD: Queen2001)
     ports:
       - "5432:5432"
     volumes:

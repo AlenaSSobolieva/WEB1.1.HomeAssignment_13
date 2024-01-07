@@ -22,8 +22,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'quoteproject.quoteapp',
-    'quoteproject.project_settings',
+    'quoteapp',
+    'project_settings',
 ]
 
 MIDDLEWARE = [
@@ -36,7 +36,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'quoteproject.project_settings.urls'
+ROOT_URLCONF = 'urls'
 
 TEMPLATES = [
     {
@@ -54,10 +54,10 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'quoteproject.project_settings.wsgi.application'
+WSGI_APPLICATION = 'wsgi.application'
 
 DATABASES = {
-    'default': env.db(default=f"sqlite:///{BASE_DIR / 'quoteproject/db.sqlite3'}"),
+    'default': env.db(default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}"),
 }
 
 LOGIN_REDIRECT_URL = env('LOGIN_REDIRECT_URL', default='/')

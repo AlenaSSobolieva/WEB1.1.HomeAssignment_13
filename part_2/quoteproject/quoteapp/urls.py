@@ -2,7 +2,7 @@
 
 
 from django.urls import path
-from quoteproject.quoteapp import views
+import views
 
 app_name = 'quoteapp'
 

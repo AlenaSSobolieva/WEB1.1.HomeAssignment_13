@@ -2,7 +2,7 @@
 
 
 from django import forms
-from quoteproject.quoteapp.models import Author, Quote
+from models import Author, Quote
 
 class AuthorForm(forms.ModelForm):
     class Meta:

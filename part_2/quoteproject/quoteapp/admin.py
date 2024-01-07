@@ -3,7 +3,7 @@
 from django.contrib import admin
 
 from django.contrib import admin
-from quoteproject.quoteapp.models import Author, Quote
+from models import Author, Quote
 
 admin.site.register(Author)
 admin.site.register(Quote)
