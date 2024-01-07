@@ -1,0 +1,19 @@
+<!-- author_quote/quote_list.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Quote List</title>
+</head>
+<body>
+
+<h2>Quotes</h2>
+<ul>
+    {% for quote in quotes %}
+        <li>{{ quote.text }} - {{ quote.author.name }}</li>
+    {% endfor %}
+</ul>
+
+</body>
+</html>

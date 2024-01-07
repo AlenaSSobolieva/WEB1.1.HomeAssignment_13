@@ -1,0 +1,42 @@
+quoteproject/
+├── manage.py
+├── db.squlite3
+├── quoteapp/
+│   ├── __init__.py
+│   ├── admin.py
+│   ├── apps.py
+│   ├── forms.py
+│   ├── models.py
+│   ├── tests.py
+│   ├── urls.py
+│   ├── views.py
+│   ├── migrations
+│   │   ├── 0001_initial.py
+│   │   └──  __init__.py
+│   ├── templates
+│   │   ├── author_quote
+│   │   │   ├── add_author.html
+│   │   │   ├── add_quote.html
+│   │   │   ├── author_list.html
+│   │   │   └── quote_list.html
+│   │   ├── registration
+│   │   │   ├── login.html
+│   │   │   └── register.html
+└── project_settings/
+    ├── __init__.py
+    ├── asgi.py
+    ├── settings.py
+    ├── urls.py
+    └── wsgi.py
+
+
+python manage.py runserver
+
+cd C:\GIT_HUB\WEB1.1.HomeAssignment_10\quoteproject
+
+cd C:\GIT_HUB\WEB1.1.HomeAssignment_10\quoteproject\manage.py
+
+$env:DJANGO_SETTINGS_MODULE = "quoteproject.quoteapp.settings"
+
+python manage.py runserver
+
