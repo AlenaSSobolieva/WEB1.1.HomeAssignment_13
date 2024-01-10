@@ -1,7 +1,7 @@
 # fastapi_contacts/app/models.py
 
 from sqlalchemy import Boolean, Column, Integer, String
-from database import Base
+from part_1.fastapi_contacts.app.database import Base
 
 class Contact(Base):
     __tablename__ = "contacts"

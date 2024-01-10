@@ -14,7 +14,7 @@ class TestContacts(unittest.TestCase):
         self.test_contact = {
             "name": "John Doe",
             "email": f"john.doe.{uuid.uuid4()}@example.com",  # Fix the uuid import
-            "password": "Queen2001)"
+            "password": "0000)"
         }
 
     def tearDown(self):

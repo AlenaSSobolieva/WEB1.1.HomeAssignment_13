@@ -3,7 +3,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status, File, UploadFile
 from sqlalchemy.orm import Session
 from cloudinary.uploader import upload
-import crud, database, schemas, utilities, dependencies
+from part_1.fastapi_contacts.app import crud, database, schemas, utilities, dependencies
 
 router = APIRouter()
 

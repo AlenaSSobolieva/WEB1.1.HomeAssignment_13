@@ -1,9 +1,9 @@
 # fastapi_contacts/app/crud.py
 
 from sqlalchemy.orm import Session
-from models import User, UserCreate, Contact
+from part_1.fastapi_contacts.app.models import User, UserCreate, Contact
 from passlib.context import CryptContext
-from security import get_password_hash
+from part_1.fastapi_contacts.app.security import get_password_hash
 
 
 crypt_context = CryptContext(schemes=["bcrypt"], deprecated="auto")

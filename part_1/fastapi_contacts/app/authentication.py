@@ -4,7 +4,7 @@ from fastapi import HTTPException, Depends, status
 from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
 from datetime import datetime, timedelta
-import crud, models
+from part_1.fastapi_contacts.app import crud
 from passlib.context import CryptContext
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")

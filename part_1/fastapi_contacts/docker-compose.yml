@@ -15,7 +15,7 @@ services:
     environment:
       POSTGRES_DB: postgres
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: Queen2001)
+      POSTGRES_PASSWORD: 0000
     ports:
       - "5432:5432"
     volumes:

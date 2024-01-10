@@ -4,7 +4,7 @@ from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
 from datetime import datetime, timedelta
-from security import SECRET_KEY, ALGORITHM
+from part_1.fastapi_contacts.app.security import SECRET_KEY, ALGORITHM
 
 # Define a simple rate limiting mechanism
 class RateLimiter:
